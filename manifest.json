@@ -1,0 +1,30 @@
+{
+    "manifest_version": 2,
+
+    "name": "Pocscan Listener",
+    "description": "the listener of poc scan.",
+    "version": "1.0",
+
+    "permissions": [
+        "tabs",
+        "cookies",
+        "webRequest",
+        "webRequestBlocking",
+        "http://*/*",
+        "https://*/*"
+    ],
+
+    "icons": {
+        "16": "icon.jpg",
+        "48": "icon.jpg",
+        "128": "icon.jpg"
+    },
+
+    "browser_action": {
+        "default_icon": "icon.jpg",
+        "default_title": "Pocscan Listener"
+    },
+    "background": {
+        "scripts": ["background.js"]
+    }
+}

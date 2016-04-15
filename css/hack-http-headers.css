@@ -1,0 +1,86 @@
+﻿body
+{
+    margin: 0;
+    overflow: hidden;
+}
+
+#nav
+{
+    width: 100%;
+    background: #777777;
+}
+
+#responseList td
+{
+    cursor:pointer;
+}
+
+#responseList
+{
+    border-top-width:0;
+}
+
+h5
+{
+    margin:0;
+    padding:0;
+}
+
+
+.rId
+{
+    width:40px;
+    text-align:center;
+}
+
+.rMe
+{
+    width:70px;
+    text-align:center;
+}
+
+.rSt
+{
+    width:50px;
+    text-align:center;
+}
+
+.rUr
+{
+    width:300px;
+    cursor:pointer;
+    border: 0;
+    padding: 0;
+    margin: 0;
+
+}
+.inputUrl
+{
+    width: 100%;
+    padding: 10px;
+    margin: 0;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+
+.requestHeaderValue
+{
+    width: 100%;
+    padding: 10px;
+    margin: 0;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+
+.rTi
+{
+    width: 100px;
+    text-align: center;
+}
+
+.alert,.table
+{
+    margin:0;
+}
