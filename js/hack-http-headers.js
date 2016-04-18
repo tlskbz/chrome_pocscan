@@ -266,7 +266,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     chrome.webRequest.onHeadersReceived.addListener(function (details) {
         if (captureType(details.type) != 0 && captureUrl(details.url) != 0 && captured != 0) {
-
             headerInfo.response.push(details);
             var currentreq = headerInfo.request[request_id];
             if (currentreq.url.indexOf($('#tempUrlFilter').val()) >= 0) {
@@ -278,23 +277,34 @@ document.addEventListener('DOMContentLoaded', function () {
                         var vel = header.value;
                         reqdict[key] = vel;
                     }
-
                     showHeader(request_id);
                     if (currentreq.method == "GET" && currentreq.type != "script" && currentreq.type != "image" && currentreq.type != "stylesheet") {
-                        //$.post(localStorage.apihost, {'method': details.method,'url':details.url,'cookie':reqdict['Cookie'], 'mode': '0'});
+                        var data = {
+                            'method': 'GET',
+                            'url': currentreq.url,
+                            'cookie': reqdict['Cookie'],
+                            'ua': reqdict['User-Agent'],
+                            'Referer': reqdict['Referer'],
+                        };
                     }
                     if (currentreq.method == "POST") {
-                        var reqdata = '';
+                        var reqdata = new Array();
                         var reqid = currentreq.requestId;
 
                         $.each(requestbody[reqid].requestBody.formData, function (name, value) {
-                            reqdata += name + '=' + value + "&";
-
+                            reqdata.push(name + '=' + value);
                         });
-                        console.log(currentreq);
-                        console.log(requestbody[reqid]);
-                        console.log(reqdata);
+                        var data = {
+                            'method': 'POST',
+                            'url': currentreq.url,
+                            'cookie': reqdict['Cookie'],
+                            'ua': reqdict['User-Agent'],
+                            'referer': reqdict['Referer'],
+                            'data': reqdata.join('&'),
+                        };
                     }
+                    //console.log(data);
+                    $.post(localStorage.apihost, data);
                 }
             }
             request_id += 1;
