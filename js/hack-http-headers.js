@@ -272,51 +272,65 @@ document.addEventListener('DOMContentLoaded', function () {
             var currentreq = headerInfo.request[request_id];
             if (currentreq.url.indexOf($('#tempUrlFilter').val()) >= 0) {
                 if (currentreq.url != localStorage.apihost) {
-                    var reqdict = new Array();
-                    for (var n = 0; n < currentreq.requestHeaders.length; n++) {
-                        var header = currentreq.requestHeaders[n];
-                        var key = header.name;
-                        var vel = header.value;
-                        reqdict[key] = vel;
-                    }
-                    showHeader(request_id);
-                    // console.log(currentreq.type);
-                    if (currentreq.method == "GET" && currentreq.type != "script" && currentreq.type != "image" && currentreq.type != "stylesheet") {
-                        var data = {
-                            'method': 'GET',
-                            'url': currentreq.url,
-                            'cookie': reqdict['Cookie'],
-                            'ua': reqdict['User-Agent'],
-                            'referer': reqdict['Referer'],
-                        };
-                    }
-                    if (currentreq.method == "POST") {
-                        var reqdata = new Array();
-                        var reqid = currentreq.requestId;
-                        try {
-                            $.each(requestbody[reqid].requestBody.formData, function (name, value) {
-                                reqdata.push(name + '=' + value);
+                    if ($("#switch-state").bootstrapSwitch('state')) {
+                        showHeader(request_id);
+                        checkhostlist.push(domainURI(currentreq.url));
+                        checkhostlist = checkhostlist.unique();
+                        if (checkhostlist.length >= 5) {
+                            console.log(checkhostlist.join(','));
+                            $.post(localStorage.apihost, {
+                                'domains': checkhostlist.join(','),
+                                'module': 'pocscan',
                             });
+                            checkhostlist = [];
+                        }
+                    } else {
+                        var reqdict = new Array();
+                        for (var n = 0; n < currentreq.requestHeaders.length; n++) {
+                            var header = currentreq.requestHeaders[n];
+                            var key = header.name;
+                            var vel = header.value;
+                            reqdict[key] = vel;
+                        }
+                        showHeader(request_id);
+
+                        if (currentreq.method == "GET" && currentreq.type != "script" && currentreq.type != "image" && currentreq.type != "stylesheet") {
                             var data = {
-                                'method': 'POST',
+                                'module': 'sqlmap',
+                                'method': 'GET',
                                 'url': currentreq.url,
                                 'cookie': reqdict['Cookie'],
                                 'ua': reqdict['User-Agent'],
                                 'referer': reqdict['Referer'],
-                                'data': reqdata.join('&'),
                             };
-                            reqdata.length = 0;
                         }
-                        catch (e) {
-                            console.log(e);
+                        if (currentreq.method == "POST") {
+                            var reqdata = new Array();
+                            var reqid = currentreq.requestId;
+                            try {
+                                $.each(requestbody[reqid].requestBody.formData, function (name, value) {
+                                    reqdata.push(name + '=' + value);
+                                });
+                                var data = {
+                                    'module': 'sqlmap',
+                                    'method': 'POST',
+                                    'url': currentreq.url,
+                                    'cookie': reqdict['Cookie'],
+                                    'ua': reqdict['User-Agent'],
+                                    'referer': reqdict['Referer'],
+                                    'data': reqdata.join('&'),
+                                };
+                                reqdata.length = 0;
+                            }
+                            catch (e) {
+                                console.log(e);
+                            }
                         }
-                    }
-                    if (data) {
-                        console.log(data);
-                        console.log($("#switch-state").bootstrapSwitch('state'));
-                        //$.post(localStorage.apihost, data);
-                        requestbody.length = 0;
-                        data.length = 0;
+                        if (data) {
+                            $.post(localStorage.apihost, data);
+                            requestbody.length = 0;
+                            data.length = 0;
+                        }
                     }
                 }
             }
