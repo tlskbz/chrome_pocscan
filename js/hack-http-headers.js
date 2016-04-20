@@ -252,8 +252,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     chrome.webRequest.onBeforeRequest.addListener(function (details) {
         if (captureType(details.type) != 0 && captureUrl(details.url) != 0 && captured != 0) {
-            id = details.requestId;
-            requestbody[id] = details;
+            if (details.url != localStorage.apihost) {
+                id = details.requestId;
+                requestbody[id] = details;
+            }
         }
     }, filter, ["blocking", "requestBody"]);
 
@@ -278,13 +280,14 @@ document.addEventListener('DOMContentLoaded', function () {
                         reqdict[key] = vel;
                     }
                     showHeader(request_id);
+                    // console.log(currentreq.type);
                     if (currentreq.method == "GET" && currentreq.type != "script" && currentreq.type != "image" && currentreq.type != "stylesheet") {
                         var data = {
                             'method': 'GET',
                             'url': currentreq.url,
                             'cookie': reqdict['Cookie'],
                             'ua': reqdict['User-Agent'],
-                            'Referer': reqdict['Referer'],
+                            'referer': reqdict['Referer'],
                         };
                     }
                     if (currentreq.method == "POST") {
@@ -303,8 +306,10 @@ document.addEventListener('DOMContentLoaded', function () {
                             'data': reqdata.join('&'),
                         };
                     }
-                    //console.log(data);
-                    $.post(localStorage.apihost, data);
+                    if (data) {
+                        //console.log(data);
+                        $.post(localStorage.apihost, data);
+                    }
                 }
             }
             request_id += 1;
