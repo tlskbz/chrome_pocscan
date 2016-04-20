@@ -3,11 +3,19 @@
 <head>
     <meta charset="utf-8">
     <title>Pocscan Listener</title>
-    <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css" />
-    <link rel="stylesheet" href="css/hack-http-headers.css" type="text/css" />
+    <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css"/>
+    <link rel="stylesheet" href="css/bootstrap-switch.css" type="text/css"/>
+    <link rel="stylesheet" href="css/hack-http-headers.css" type="text/css"/>
+    <link rel="stylesheet" href="css/highlight.css" type="text/css"/>
+    <link rel="stylesheet" href="css/main.css" type="text/css"/>
+
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
+    <script src="js/bootstrap-switch.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/highlight.js"></script>
     <script src="js/hack-http-headers.js"></script>
+
 </head>
 <body>
 
@@ -29,7 +37,7 @@
 <table id="mainTable" class="table table-bordered table-condensed table-hover">
     <thead>
     <tr>
-        <th class="text-justify rId" id="httpRequestId"># <span class="glyphicon glyphicon-arrow-up"></span> </th>
+        <th class="text-justify rId" id="httpRequestId"># <span class="glyphicon glyphicon-arrow-up"></span></th>
         <th class="text-justify rMe">Method</th>
         <th class="text-justify rSt">Status</th>
         <th class="text-justify rUr">Url</th>
@@ -39,7 +47,7 @@
     </thead>
     <tr>
         <td colspan="5" style="width: 600px; padding: 0;">
-            <div class="results" style="width: 600px; height: 500px; overflow: auto" >
+            <div class="results" style="width: 600px; height: 500px; overflow: auto">
                 <table id="responseList" class="table table-hover table-condensed table-bordered">
                     <tbody>
                     </tbody>
@@ -49,24 +57,30 @@
         <td style="padding: 0;" id="previewArea">
             <div style="padding:10px;">
                 <p class="lead">
-                    <kbd>Capture</kbd> http request headers. <kbd>edit</kbd> then <kbd>Save</kbd><br />
+                    <kbd>Capture</kbd> http request headers. <kbd>edit</kbd> then <kbd>Save</kbd><br/>
                     It will work when next time you visit the same url.
                 </p>
-                <hr />
-				<div class="input-group input-group-lg">
-					<span class="input-group-addon">API</span>
-					<input type="text" id='scanapi' class="form-control" placeholder="务必输入API地址" >
+                <hr/>
+                <div class="input-group input-group-lg">
+                    <span class="input-group-addon">API</span>
+                    <input type="text" id='scanapi' class="form-control" placeholder="务必输入API地址">
 					<span class="input-group-btn">
 						<button class="btn btn-default" type="button" id="apisave">
-							Save
-						</button>
+                            Save
+                        </button>
 					</span>
-				</div>
-			</div>
+                </div>
+
+                <div class="input-group input-group-lg">
+                    <input id="switch-state" type="checkbox" data-on-text="pocscan" data-off-text="sqlmap" checked>
+                </div>
+
+            </div>
         </td>
     </tr>
 </table>
-<div class="modal fade" id="editModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+<div class="modal fade" id="editModal" data-backdrop="static" tabindex="-1" role="dialog"
+     aria-labelledby="editModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -82,7 +96,8 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="settingModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="settingModalLabel" aria-hidden="true">
+<div class="modal fade" id="settingModal" data-backdrop="static" tabindex="-1" role="dialog"
+     aria-labelledby="settingModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">

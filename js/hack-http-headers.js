@@ -293,22 +293,30 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (currentreq.method == "POST") {
                         var reqdata = new Array();
                         var reqid = currentreq.requestId;
-
-                        $.each(requestbody[reqid].requestBody.formData, function (name, value) {
-                            reqdata.push(name + '=' + value);
-                        });
-                        var data = {
-                            'method': 'POST',
-                            'url': currentreq.url,
-                            'cookie': reqdict['Cookie'],
-                            'ua': reqdict['User-Agent'],
-                            'referer': reqdict['Referer'],
-                            'data': reqdata.join('&'),
-                        };
+                        try {
+                            $.each(requestbody[reqid].requestBody.formData, function (name, value) {
+                                reqdata.push(name + '=' + value);
+                            });
+                            var data = {
+                                'method': 'POST',
+                                'url': currentreq.url,
+                                'cookie': reqdict['Cookie'],
+                                'ua': reqdict['User-Agent'],
+                                'referer': reqdict['Referer'],
+                                'data': reqdata.join('&'),
+                            };
+                            reqdata.length = 0;
+                        }
+                        catch (e) {
+                            console.log(e);
+                        }
                     }
                     if (data) {
-                        //console.log(data);
-                        $.post(localStorage.apihost, data);
+                        console.log(data);
+                        console.log($("#switch-state").bootstrapSwitch('state'));
+                        //$.post(localStorage.apihost, data);
+                        requestbody.length = 0;
+                        data.length = 0;
                     }
                 }
             }
